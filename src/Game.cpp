@@ -112,7 +112,6 @@ void Game::createStartingInventory()
         new Consumable("Bread", "A small loaf of bread.", 5));
 }
 
-
 // TODO: Implement addRoom
 // HINTS:
 // - Check if room pointer is not NULL

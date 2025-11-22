@@ -18,7 +18,6 @@
  * - Multi-file project organization
  * - Memory management patterns
  */
-
 int main() {
     // Seed random number generator for combat calculations
     // This ensures different random numbers each time the game runs
