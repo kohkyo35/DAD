@@ -21,6 +21,10 @@ Player::Player(const std::string& name)
 //
 Player::~Player() {
     // TODO: Delete all inventory items
+    for (size_t i = 0; i < inventory.size(); i++) {
+        delete inventory[i];
+    }
+    inventory.clear();
 }
 
 
@@ -34,6 +38,31 @@ Player::~Player() {
 //
 void Player::displayStats() const {
     // TODO: Display comprehensive player stats
+    std::cout << "=====================" << std::endl;
+    std::cout << getName() << " - Level " << level << std::endl;
+    std::cout << "HP: " << getCurrentHP() << "/" << getMaxHP() << std::endl;
+
+    int atk = getAttack();
+    int def = getDefense();
+
+    //static_cast<data type>(parameter) meaning that change the type of equipped_weapon to Weapon*
+    //use static_cast to access getDamageBonus and getDefenseBonus because equipped_weapon is Item* data type
+    
+    if (equipped_weapon) atk += static_cast<Weapon*>(equipped_weapon)->getDamageBonus();
+    if (equipped_armor) def += static_cast<Armor*>(equipped_armor)->getDefenseBonus();
+
+
+    std::cout << "Attack: " << atk;
+    if (equipped_weapon) std::cout << " (" << equipped_weapon->getName() << ")";
+    std::cout << std::endl;
+
+    std::cout << "Defense: " << def;
+    if (equipped_armor) std::cout << " (" << equipped_armor->getName() << ")";
+    std::cout << std::endl;
+
+    std::cout << "Gold: " << gold << std::endl;
+    std::cout << "Experience: " << experience << "/" << (level * 100) << std::endl;
+    std::cout << "=====================" << std::endl;
 }
 
 
@@ -44,7 +73,9 @@ void Player::displayStats() const {
 //
 int Player::calculateDamage() const {
     // TODO: Calculate damage with weapon bonus
-    return 0;  // REPLACE THIS
+    int dmg = Character::calculateDamage();
+    if (equipped_weapon) dmg += static_cast<Weapon*>(equipped_weapon)->getDamageBonus();
+    return dmg;  // REPLACE THIS
 }
 
 
@@ -54,6 +85,9 @@ int Player::calculateDamage() const {
 // - Print pickup message with item name
 //
 void Player::addItem(Item* item) {
+    if (!item) return;
+    inventory.push_back(item);
+    std::cout << "Picked up: " << item->getName() << std::endl;
     // TODO: Add item to inventory
 }
 
@@ -67,6 +101,19 @@ void Player::addItem(Item* item) {
 //
 void Player::removeItem(const std::string& item_name) {
     // TODO: Find and remove item from inventory
+    std::string target = item_name;
+    std::transform(target.begin(), target.end(), target.begin(), ::tolower);
+    for (size_t i = 0; i < inventory.size(); i++) {
+        std::string test = inventory[i]->getName();
+        std::transform(test.begin(), test.end(), test.begin(), ::tolower);
+
+        if (test == target) {
+            delete inventory[i];
+            inventory.erase(inventory.begin() + i);
+            return;
+        }
+    }
+    std::cout << "Item not found: " << item_name << std::endl;
 }
 
 
@@ -80,6 +127,16 @@ void Player::removeItem(const std::string& item_name) {
 //
 void Player::displayInventory() const {
     // TODO: Display all items in inventory
+    std::cout << "----- Inventory -----" << std::endl;
+    if (inventory.empty()) {
+        std::cout << "Empty" << std::endl;
+        } else {
+            for (size_t i = 0; i < inventory.size(); i++) {
+                std::cout << "- " << inventory[i]->getName() << " ("
+                << inventory[i]->getType() << ")" << std::endl;
+            }
+        }
+        std::cout << "---------------------" << std::endl;
 }
 
 
@@ -91,7 +148,15 @@ void Player::displayInventory() const {
 //
 bool Player::hasItem(const std::string& item_name) const {
     // TODO: Check if item exists in inventory
-    return false;  // REPLACE THIS
+    std::string target = item_name;
+    std::transform(target.begin(), target.end(), target.begin(), ::tolower);
+
+    for (size_t i = 0; i < inventory.size(); i++) {
+        std::string test = inventory[i]->getName();
+        std::transform(test.begin(), test.end(), test.begin(), ::tolower);
+        if (test == target) return true;
+    }
+    return false;
 }
 
 
@@ -103,9 +168,17 @@ bool Player::hasItem(const std::string& item_name) const {
 //
 Item* Player::getItem(const std::string& item_name) {
     // TODO: Find and return item pointer
-    return NULL;  // REPLACE THIS
-}
+    std::string target = item_name;
+    std::transform(target.begin(), target.end(), target.begin(), ::tolower);
 
+
+    for (size_t i = 0; i < inventory.size(); i++) {
+        std::string test = inventory[i]->getName();
+        std::transform(test.begin(), test.end(), test.begin(), ::tolower);
+        if (test == target) return inventory[i];
+    }
+    return NULL;
+}
 
 // TODO: Implement equipWeapon
 // HINTS:
@@ -118,6 +191,22 @@ Item* Player::getItem(const std::string& item_name) {
 //
 void Player::equipWeapon(const std::string& weapon_name) {
     // TODO: Equip weapon from inventory
+    Item* item = getItem(weapon_name);
+    if (!item) {
+        std::cout << "No such item: " << weapon_name << std::endl;
+        return;
+    }
+    
+    if (item->getType() != "Weapon") {
+        std::cout << "You can't equip that!" << std::endl;
+        return;
+    }
+
+
+    if (equipped_weapon) std::cout << "Unequipped: " << equipped_weapon->getName() << std::endl;
+    
+    equipped_weapon = static_cast<Weapon*>(item);
+    std::cout << "Equipped weapon: " << item->getName() << std::endl;
 }
 
 
@@ -129,6 +218,18 @@ void Player::equipWeapon(const std::string& weapon_name) {
 //
 void Player::equipArmor(const std::string& armor_name) {
     // TODO: Equip armor from inventory
+    Item* item = getItem(armor_name);
+    if (!item) {
+        std::cout << "No such item: " << armor_name << std::endl;
+        return;
+    }
+    if (item->getType() != "Armor") {
+        std::cout << "You can't equip that!" << std::endl;
+        return;
+    }
+    if (equipped_armor)std::cout << "Unequipped: " << equipped_armor->getName() << std::endl;
+    equipped_armor = static_cast<Armor*>(item);
+    std::cout << "Equipped armor: " << item->getName() << std::endl;
 }
 
 
@@ -140,6 +241,12 @@ void Player::equipArmor(const std::string& armor_name) {
 //
 void Player::unequipWeapon() {
     // TODO: Unequip current weapon
+    if (!equipped_weapon) {
+        std::cout << "No weapon is equipped." << std::endl;
+        return;
+    }
+    std::cout << "Unequipped weapon: " << equipped_weapon->getName() << std::endl;
+    equipped_weapon = NULL;
 }
 
 
@@ -150,6 +257,12 @@ void Player::unequipWeapon() {
 //
 void Player::unequipArmor() {
     // TODO: Unequip current armor
+    if (!equipped_armor) {
+        std::cout << "No armor is equipped." << std::endl;
+        return;
+    }
+    std::cout << "Unequipped armor: " << equipped_armor->getName() << std::endl;
+    equipped_armor = NULL;
 }
 
 
@@ -167,6 +280,25 @@ void Player::unequipArmor() {
 //
 void Player::useItem(const std::string& item_name) {
     // TODO: Use consumable item
+    Item* item = getItem(item_name);
+    if (!item) {
+        std::cout << "No such item: " << item_name << std::endl;
+        return;
+    }
+    if (item->getType() != "Consumable") {
+        std::cout << "You can't use that!" << std::endl;
+        return;
+    }
+
+    Consumable* c = static_cast<Consumable*>(item);
+    if (c->isUsed()) {
+        std::cout << item->getName() << " is already used!" << std::endl;
+        return;
+    }
+
+    heal(c->getHealingAmount());
+    c->use();
+    removeItem(item_name);
 }
 
 
@@ -179,6 +311,9 @@ void Player::useItem(const std::string& item_name) {
 //
 void Player::gainExperience(int exp) {
     // TODO: Add experience and check for level up
+    experience += exp;
+    std::cout << "Gained " << exp << " EXP!" << std::endl;
+    if (experience >= level * 100)levelUp();
 }
 
 
@@ -196,4 +331,16 @@ void Player::gainExperience(int exp) {
 //
 void Player::levelUp() {
     // TODO: Level up the player
+    level++;
+    experience = 0;
+
+    setMaxHP(getMaxHP() + 10);
+    setCurrentHP(getMaxHP());
+
+    setAttack(getAttack() + 2);
+    setDefense(getDefense() + 1);
+
+    std::cout << "===== LEVEL UP! =====" << std::endl;
+    std::cout << "You are now level " << level << "!" << std::endl;
+    displayStats();
 }

@@ -48,7 +48,7 @@ public:
     // - Must delete all items
     // - DON'T delete rooms in exits map (Game owns those)
     ~Room();
-    
+    void setVisited(bool v){visited = v; }    
     // Display room information
     // TODO: Implement these in Room.cpp
     void display() const;
@@ -80,7 +80,7 @@ public:
     std::string getName() const { return name; }
     std::string getDescription() const { return description; }
     bool isVisited() const { return visited; }
-    void markVisited() { visited = true; }
+    //void markVisited() { visited = true; }
 };
 
 #endif // ROOM_H
