@@ -52,7 +52,7 @@ void Game::initializeWorld()
     // TODO: Add monsters (using derived monster classes)
     world["Hallway"]->setMonster(new Goblin());
     world["Armory"]->setMonster(new Skeleton());
-    world["Treasury"]->setMonster(new Skeleton());
+    world["Treasury"]->setMonster(new Ghost());
     world["Throne Room"]->setMonster(new Dragon());
 
     // TODO: Add items
@@ -71,7 +71,7 @@ void Game::createStartingInventory()
 {
     player->addItem(new Weapon("Rusty Dagger", "An old, dull dagger.", 2));
     player->addItem(new Consumable("Bread", "A small loaf of bread.", 5));
-    player->addItem(new Weapon("Dragon Slayer", "Ultimate OP sword", 100));
+    player->addItem(new Weapon("OP SWORD", "Ultimate OP sword", 100));
 }
 
 // TODO: Implement addRoom

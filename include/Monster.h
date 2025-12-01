@@ -98,5 +98,25 @@ public:
     // TODO: Implement in Monster.cpp
     int calculateDamage() const;
 };
+/////////////////////EXTENSION 2 ADD MONSTERS
+class Troll: public Monster{
+public: 
+    Troll();
+    std::string getAttackMessage() const;
+};
+
+class Ghost: public Monster{
+public: 
+    Ghost();
+    std::string getAttackMessage() const;
+    int calculateDamage() const;
+};
+
+class Wizard: public Monster{
+public: 
+    Wizard();
+    std::string getAttackMessage() const;
+    int calculateDamage() const;
+};
 
 #endif // MONSTER_H

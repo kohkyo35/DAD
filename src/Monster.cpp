@@ -1,6 +1,6 @@
 #include "Monster.h"
 #include <iostream>
-
+#include <cstdlib>
 // ============================================================================
 // Base Monster class
 // ============================================================================
@@ -202,4 +202,45 @@ int Dragon::calculateDamage() const {
     // TODO: Calculate damage with fire bonus
     int base = Monster::calculateDamage();
     return base + 5;  // REPLACE THIS
+}
+////////////////////////////EXTENSION 2
+//ADDING NEW MONSTERS
+//EXTENSION 2.1 TROLL
+
+Troll::Troll() : Monster("Troll", 80, 2, 5, 30, 30){
+    addLoot(new Consumable("Beef Sirloin", "Restores 30HP", 30)); // adding new consumable item to heal your hp by 30
+}
+std::string Troll::getAttackMessage() const {
+    return "The troll attacks!";
+}
+///////////////2.2 GHOST with high evasion
+Ghost::Ghost(): Monster("Ghost", 25, 10, 1, 25, 8)
+{
+    addLoot(new Consumable("Ghost Soul potion", "Restores 15HP", 15));
+}
+std::string Ghost::getAttackMessage() const {
+    return "The ghost attacks!";
+}
+int Ghost::calculateDamage() const {// this is how i implemented evasion property of the ghost
+    int roll = std::rand() % 10;
+    if (roll < 8) {//adding 30%chance of dodging ability
+        return 0;
+    }
+    return Monster::calculateDamage();
+}
+
+Wizard::Wizard()
+    : Monster("Wizard", 50, 12, 3, 40, 20)
+{
+    addLoot(new Consumable("Mana Potion", "Restores magical 30HP", 30));
+    addLoot(new Weapon("Dumbledore's wand", "Wizard's heritage", 7));
+}
+
+std::string Wizard::getAttackMessage() const {
+    return "The wizard attacks";
+}
+
+int Wizard::calculateDamage() const {
+    int base = Monster::calculateDamage();
+    return base + (std::rand() % 10);
 }
