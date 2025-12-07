@@ -11,7 +11,7 @@ Player::Player(const std::string& name)
       level(1), experience(0), gold(0),
       equipped_weapon(NULL), equipped_armor(NULL) {
 }
-
+//inheritance aplied where player is the child of Character class
 
 // TODO: Implement Player destructor
 // HINTS:
@@ -74,7 +74,7 @@ void Player::displayStats() const {
 int Player::calculateDamage() const {
     // TODO: Calculate damage with weapon bonus
     int dmg = Character::calculateDamage();
-    if (equipped_weapon) dmg += static_cast<Weapon*>(equipped_weapon)->getDamageBonus();
+    if (equipped_weapon) dmg += static_cast<Weapon*>(equipped_weapon)->getDamageBonus();//static_cast
     return dmg;  // REPLACE THIS
 }
 
@@ -86,7 +86,7 @@ int Player::calculateDamage() const {
 //
 void Player::addItem(Item* item) {
     if (!item) return;
-    inventory.push_back(item);
+    inventory.push_back(item); // vector implementation .push_back
     std::cout << "Picked up: " << item->getName() << std::endl;
     // TODO: Add item to inventory
 }
@@ -103,6 +103,10 @@ void Player::removeItem(const std::string& item_name) {
     // TODO: Find and remove item from inventory
     std::string target = item_name;
     std::transform(target.begin(), target.end(), target.begin(), ::tolower);
+    //transform takes input range [begin, end), and output start iterator, and a function transforms each element
+    //it writes the transformed result into the output
+    //chatgpt
+    
     for (size_t i = 0; i < inventory.size(); i++) {
         std::string test = inventory[i]->getName();
         std::transform(test.begin(), test.end(), test.begin(), ::tolower);

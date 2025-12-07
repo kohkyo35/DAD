@@ -57,7 +57,7 @@ public:
     // Combat methods
     // Virtual so derived classes can override
     // TODO: Implement in Character.cpp
-    virtual int calculateDamage() const;
+    virtual int calculateDamage() const; // declared virtual so that the base classes in monster and player can override
     
     // TODO: Implement in Character.cpp
     void takeDamage(int damage);
@@ -68,7 +68,7 @@ public:
     // Display methods
     // Virtual with default implementation - can be overridden
     // TODO: Implement in Character.cpp
-    virtual void displayStats() const;
+    virtual void displayStats() const; // this has to be declared virtual so that the base classes in monster and player can override it
     
     // Brief status display (for combat)
     // TODO: Implement in Character.cpp

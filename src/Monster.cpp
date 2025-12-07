@@ -223,7 +223,7 @@ std::string Ghost::getAttackMessage() const {
 }
 int Ghost::calculateDamage() const {// this is how i implemented evasion property of the ghost
     int roll = std::rand() % 10;
-    if (roll < 3) {//adding 30%chance of dodging ability
+    if (roll < 10) {//adding chance of dodging ability
         return 0;
     }
     return Monster::calculateDamage();

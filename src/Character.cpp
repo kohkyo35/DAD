@@ -12,7 +12,9 @@
 Character::Character(const std::string& name, int hp, int attack, int defense)
     : name(name), max_hp(hp), current_hp(hp), attack(attack), 
       defense(defense), alive(true) {
-}
+}// constructor
+//sets its private members name = name / hp = hp and so on
+//encapsulation applied
 
 
 // TODO: Implement Character destructor
@@ -23,7 +25,8 @@ Character::Character(const std::string& name, int hp, int attack, int defense)
 //
 Character::~Character() {
 }
-
+//destructor 
+// no new memory allocation happened in the constructor so nothing to delete
 
 // TODO: Implement calculateDamage
 // HINTS:
@@ -34,7 +37,8 @@ int Character::calculateDamage() const {
     // TODO: Calculate and return damage
     // Base damage is attack stat plus small random bonus
     return attack + (rand() % 5);
-}
+}//use rand()%5 to add bonus damage to its original attack
+
 
 
 // TODO: Implement takeDamage

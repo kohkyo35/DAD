@@ -13,7 +13,7 @@ Item::Item(const std::string& name, const std::string& description,
            const std::string& type, int value)
     : name(name), description(description), type(type), value(value) {
 }
-
+// initializes every input parameter to its corresponding private members
 
 // TODO: Implement Item destructor
 // HINTS:

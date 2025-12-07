@@ -1,3 +1,69 @@
+# ECE 312 - Lab 6 Write-Up
+
+**Name:** Ohkyo Kwon  
+**EID:** ok2769  
+**Date:** 12/6/2025
+
+---
+
+## 1. Design Decisions (3-4 sentences)
+
+Briefly describe your key design choices and rationale:
+
+- **Overall implementations:** How did you make use of object-oriented concepts in your decision?  Specifically, how did you use inheritance and polymorphism (if you did) and how did it help or complicate the design over using a language like C?  Draw a diagram showing the classes you used and their relationships to each other (subclass to superclass relationships specifically.) <br> - In designing my RPG system, I relied heavily on OOP particularly inheritance and polymorphism to organize game entities. The core hierarchy is Character -> Player/Monster and both Monster subclasses(Warrior, Mage, Rogue) reuse shared behaviors while overriding key methods like calculateDamage() and getAttackMessage(), something that would be extremely cumbersome in C without polymorphism. Using virtual functions allowed the game to choose behaviors at runtime, such as determining which monster or class-specific attack logic to execute. 
+
+*DIAGRAM
+[Character] -> [Player], [Monster]
+[Player] -> [Warrior], [Mage], [Rogue]
+[Monster] -> [Goblin], [Skeleton], [Skeleton], [Dragon], [Troll], [Ghost], [Wizard]
+
+- **Memory management:** What strategy did you use to avoid leaks? Any particular challenges? <br> For memory management, I manually ensured ownership rules were clear that Game deletes all rooms, Player deletes all items in inventory, and Monster deletes all loot items in its loot table. The biggest challenge was preventing double-deletes while still cleaning up dynamically allocated objects, especially once new monsters and player classes were added. 
+---
+
+
+## 2. Testing & Debugging (2-3 sentences)
+
+Describe your testing process and any major bugs you encountered:
+
+- **Testing approach:** What was your strategy beyond running `make test`?
+<br> Aside from running make test, I perform interactive manual testing by running the full game, exploring rooms, fighting each monster type, and verifying class-specific behaviors like Mage spell variance and Rogue critical strikes. I also used print-based debuggin to confirm room connections, loot drops, and combat damage calculations. 
+
+- **Most difficult bug:** What was the hardest bug to find/fix and how did you solve it? <br> The hardest bug I encountered was a memory issue caused by deleting item twice or failing to use virtual destructors - solved by adding a virtual destructor to Item and letting Player clean up inventory correctly. 
+
+---
+
+## 3. Implementation Challenges (2-3 sentences)
+
+Which TODOs were most challenging and why?
+
+1. **Hardest TODO:** <br> The most challenging TODO was implementing the polymorphic combat system so that different monster types and player subclasses could override calculateDamage() cleanly without breaking the existing flow. Ensuring that Ghost evasion, Wizard spell attacks, and Rogue critical hits all blended naturally into the combat loop required careful OOP design. Additionally, I struggled with how virtual functions 
+
+
+2. **Most time-consuming:** <br> Memory management was the most time-consuming, especially when I was making sure that monsters dropped items safely, players deleted inventory items only once, and no wild pointers remainded after combat. Plus, I struggled how to implement the mechanism of attack percentage using rand() function. 
+
+
+3. **Most interesting:** <br> The most interesting part was extending the game with new monster classes(Troll, Ghost, Wizard) and Player classes(Warrior, Mage, Rogue). These extensions showed how powerful inheritance and virutal methods are for adding new behaviors without rewriting the game engine. With the superclass already defined, I was able to easily make copies of children. 
+
+---
+
+
+## 4. Reflection (1-2 sentences)
+
+What was the most valuable lesson from this lab? <br> The most valuable lesson from this lab was learning how effective Object-oriented-principles can be for building extensible game systems, especially compared to a procedural approach. I also realized how critical proper memory ownership and virtual destructors are when working with dynamic allocation in C++. 
+
+---
+
+## Submission Checklist
+
+- [V] All functionality completed
+- [V] `make test` passes with no failures
+- [V] `make valgrind` shows no memory leaks
+- [V] Game fully functional 
+- [V] Code compiles without warnings (`-Wall -Wextra`)
+- [V] This write-up completed
+- [V some of them] Optional Bonus attempted? (Yes/No): Yes only Extension 2 and 4. I added new monster types and new player classes. 
+
+
 git # Dungeon Crawler RPG - Lab Assignment
 
 ## Overview
