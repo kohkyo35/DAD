@@ -38,7 +38,7 @@ public:
     // Destructor - CRITICAL for memory management!
     // TODO: Implement in Player.cpp
     // HINT: Must delete all items in inventory
-    ~Player();
+    virtual ~Player();
     
     // Override displayStats from Character
     // TODO: Implement in Player.cpp
@@ -80,6 +80,30 @@ public:
     // Gold management
     void addGold(int amount) { gold += amount; }
     void spendGold(int amount) { gold -= amount; }
+};
+
+class Warrior : public Player {
+public:
+    Warrior(const std::string& name);
+
+    virtual int calculateDamage() const;
+    virtual void displayStats() const;
+};
+
+class Mage : public Player {
+public:
+    Mage(const std::string& name);
+
+    virtual int calculateDamage() const;
+    virtual void displayStats() const;
+};
+
+class Rogue : public Player {
+public:
+    Rogue(const std::string& name);
+
+    virtual int calculateDamage() const;
+    virtual void displayStats() const;
 };
 
 #endif // PLAYER_H

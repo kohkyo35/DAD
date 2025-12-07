@@ -344,3 +344,71 @@ void Player::levelUp() {
     std::cout << "You are now level " << level << "!" << std::endl;
     displayStats();
 }
+///instantiating warrior, mage, and rogue with different hp, attack, defense stack
+///from the super class Player
+Warrior::Warrior(const std::string &name):Player(name){
+    setMaxHP(130);
+    setCurrentHP(130);
+    setAttack(getAttack() + 5);
+    setDefense(getDefense() + 3);
+}
+int Warrior::calculateDamage() const{
+    return Player::calculateDamage()+3;
+}
+void Warrior::displayStats() const{
+    std::cout << "[Warrior] ";
+    Player::displayStats();
+}
+
+Mage::Mage(const std::string& name)
+    : Player(name)
+{
+    setMaxHP(70);
+    setCurrentHP(70);
+    setAttack(getAttack() + 2);
+    setDefense(getDefense() - 1);
+}
+//Mage does a random damage skill depending on 0, 1, 2
+//each of his skill does different damage
+int Mage::calculateDamage() const {
+    int roll = rand() % 3;
+
+    if (roll == 0) {
+        std::cout << "You cast Fireball!\n";
+        return getAttack() + 12;
+    } else if (roll == 1) {
+        std::cout << "You cast Ice Spike!\n";
+        return getAttack() + 7;
+    } else {
+        std::cout << "You cast Magic Missile.\n";
+        return getAttack() + 3;
+    }
+}
+void Mage::displayStats() const {
+    std::cout << "[Mage] ";
+    Player::displayStats();
+}
+
+Rogue::Rogue(const std::string& name)
+    : Player(name)
+{
+    setMaxHP(90);
+    setCurrentHP(90);
+
+    setAttack(getAttack() + 7);
+    setDefense(getDefense() - 3);
+}
+//Rogue does a critical daamge 30% chance
+//implement rand() to calculate the probability and cast it
+int Rogue::calculateDamage() const {
+    if (rand() % 10 < 3) {
+        std::cout << "Critical Strike!\n";
+        return getAttack() * 2 + 5;
+    }
+    return Player::calculateDamage() + 1;
+}
+
+void Rogue::displayStats() const {
+    std::cout << "[Rogue] ";
+    Player::displayStats();
+}

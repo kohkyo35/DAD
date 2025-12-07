@@ -35,6 +35,12 @@ void Game::initializeWorld()
     Room *armory = new Room("Armory", "Racks of weapons and armor line the dusty walls.");
     Room *treasury = new Room("Treasury", "Glittering coins and chests fill the room.");
     Room *throne = new Room("Throne Room", "A vast chamber dominated by a looming throne. The air feels heavy.");
+    
+    //////adding more rooms for three different types of new monsters
+    Room *crypt = new Room("Crypt", "A cold underground chamber filled with ancient tombs.");
+    Room *wizardtower = new Room("Wizard Tower", "A spiraling tower crackling with arcane energy.");
+    Room *shadowpit = new Room("Shadow Pit", "Darkness swirls here like a living entity.");
+
 
     // TODO: Add rooms to world
     addRoom(entrance);
@@ -43,17 +49,33 @@ void Game::initializeWorld()
     addRoom(treasury);
     addRoom(throne);
 
+    //adding new rooms for three new monsters
+    addRoom(crypt);
+    addRoom(wizardtower);
+    addRoom(shadowpit);
+
     // TODO: Connect rooms bidirectionally
     connectRooms("Entrance", "north", "Hallway");
     connectRooms("Hallway", "west", "Armory");
     connectRooms("Hallway", "east", "Treasury");
     connectRooms("Hallway", "north", "Throne Room");
 
+    //new rooms arrangement arbitrarily
+    connectRooms("Armory", "south", "Crypt");
+    connectRooms("Crypt", "south", "Wizard Tower");
+    connectRooms("Wizard Tower", "west", "Shadow Pit");
+
+
     // TODO: Add monsters (using derived monster classes)
     world["Hallway"]->setMonster(new Goblin());
     world["Armory"]->setMonster(new Skeleton());
     world["Treasury"]->setMonster(new Ghost());
     world["Throne Room"]->setMonster(new Dragon());
+    
+    world["Crypt"]->setMonster(new Troll());
+    world["Wizard Tower"]->setMonster(new Wizard());
+    world["Shadow Pit"]->setMonster(new Ghost());
+
 
     // TODO: Add items
     world["Entrance"]->addItem(new Consumable("Small Potion", "A small potion that restores health.", 10));
@@ -71,7 +93,7 @@ void Game::createStartingInventory()
 {
     player->addItem(new Weapon("Rusty Dagger", "An old, dull dagger.", 2));
     player->addItem(new Consumable("Bread", "A small loaf of bread.", 5));
-    player->addItem(new Weapon("OP SWORD", "Ultimate OP sword", 100));
+    player->addItem(new Weapon("OP SWORD", "Ultimate OP sword", 50));
 }
 
 // TODO: Implement addRoom
@@ -119,7 +141,26 @@ void Game::run()
     std::getline(std::cin, name);
     if (name.empty()) name = "Hero";
 
-    player = new Player(name);
+    //player = new Player(name);
+    //allow the user to choose the character they want to play
+    //bonus 1 - warrior 2-mage 3-rogue
+    int choice;
+    std::cout << "Choose your class:\n";
+    std::cout << "1) Warrior\n2) Mage\n3) Rogue\n";
+    std::cin >> choice;
+    std::cin.ignore();
+
+    if(choice == 1) {
+        player = new Warrior(name);
+        std::cout << "You chose WARRIOR!\n";}
+    else if(choice == 2){
+        player = new Mage(name);
+        std::cout << "You chose MAGE!\n";}
+
+    else{
+        player = new Rogue(name);
+        std::cout << "You chose ROGUE!\n";}
+    
 
     initializeWorld();
     createStartingInventory();
@@ -284,6 +325,7 @@ void Game::combat(Monster *monster)
         {
             int dmg = player->calculateDamage();
             std::cout << "\nYou attack!\n";
+            
             monster->takeDamage(dmg);
 
             if (!monster->isAlive())

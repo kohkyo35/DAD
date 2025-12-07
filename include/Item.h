@@ -32,7 +32,7 @@ public:
     
     // Destructor
     // TODO: Implement in Item.cpp
-    ~Item();
+    virtual ~Item();
     
     // Getters (inline)
     std::string getName() const { return name; }
